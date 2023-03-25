@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from 'App';
 import GlobalStyles from '@/lib/GlobalStyles';
-import QueryProvider from '@/components/providers/QueryProvider';
+import QueryProvider from '@/components/QueryProvider';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
