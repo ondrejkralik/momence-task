@@ -5,13 +5,17 @@ import RatesTable from './RatesTable';
 
 interface ExchangeRatesProps {
   rates: ExchangeRate[];
+  date: Date;
 }
 
-const ExchangeRates: React.FC<ExchangeRatesProps> = ({ rates }) => {
+const ExchangeRates: React.FC<ExchangeRatesProps> = ({ rates, date }) => {
   return (
     <Wrapper>
       <Column>
         <ConvertForm rates={rates} />
+        <Note>
+          The exchange rates are from the Czech national bank dated {date.toLocaleDateString()}.
+        </Note>
       </Column>
 
       <Column>
@@ -32,6 +36,13 @@ const Wrapper = styled.div`
 
 const Column = styled.div`
   width: 100%;
+`;
+
+const Note = styled.p`
+  font-size: 14px;
+  color: #666;
+  width: 350px;
+  padding: 8px;
 `;
 
 export default ExchangeRates;

@@ -1,6 +1,6 @@
 import * as Select from '@radix-ui/react-select';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
-import { blackA } from '@radix-ui/colors';
+import { blackA, gray } from '@radix-ui/colors';
 
 import type { ExchangeRate } from '@/types';
 import { forwardRef } from 'react';
@@ -21,22 +21,23 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({ rates, value, onChange 
           <ChevronDownIcon />
         </Select.SelectIcon>
       </SelectTrigger>
+
       <Select.Portal>
         <SelectContent>
           <SelectScrollUpButton>
             <ChevronUpIcon />
           </SelectScrollUpButton>
+
           <SelectViewport>
             {rates.map(rate => (
               <SelectItem key={rate.code} value={rate.code}>
-                <img
-                  src={`https://img.kurzy.cz/items/flags/${rate.code}.gif`}
-                  style={{ paddingRight: 8 }}
-                />
-                {rate.code} - {rate.currency.charAt(0).toUpperCase() + rate.currency.slice(1)}
+                <FlagImg src={`https://img.kurzy.cz/items/flags/${rate.code}.gif`} />
+                {rate.code} - {rate.country}{' '}
+                {rate.currency.charAt(0).toUpperCase() + rate.currency.slice(1)}
               </SelectItem>
             ))}
           </SelectViewport>
+
           <SelectScrollDownButton>
             <ChevronDownIcon />
           </SelectScrollDownButton>
@@ -108,6 +109,7 @@ const StyledItem = styled(Select.Item)`
   user-select: none;
 
   &[data-highlighted] {
+    background-color: ${gray.gray8};
     outline: none;
   }
 `;
@@ -135,6 +137,10 @@ const SelectScrollUpButton = styled(Select.ScrollUpButton)`
 
 const SelectScrollDownButton = styled(Select.ScrollDownButton)`
   ${scrollButtonStyles}
+`;
+
+const FlagImg = styled.img`
+  padding: 0 8px 2px 0;
 `;
 
 export default CurrencySelect;

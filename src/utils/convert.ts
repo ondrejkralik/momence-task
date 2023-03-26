@@ -1,17 +1,21 @@
-export function convertRatesToJson(input?: string) {
+export function convertRates(input?: string) {
   if (!input) {
-    return [];
+    return {
+      date: new Date(),
+      rates: [],
+    };
   }
 
-  // split the input into lines and remove the first two lines
-  let lines = input.split('\n').slice(2);
+  let lines = input.split('\n');
 
   // check if the last line is empty and remove it
   if (lines[lines.length - 1].trim().length === 0) {
     lines = lines.slice(0, -1);
   }
 
-  return lines.map(line => {
+  const date = new Date(lines[0].split('#')[0]);
+
+  const rates = lines.slice(2).map(line => {
     const [country, currency, amount, code, rate] = line.split('|');
 
     return {
@@ -22,4 +26,9 @@ export function convertRatesToJson(input?: string) {
       rate: Number(rate),
     };
   });
+
+  return {
+    date,
+    rates,
+  };
 }
