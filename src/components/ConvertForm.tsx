@@ -11,57 +11,37 @@ interface ConvertFormProps {
 }
 
 const ConvertForm: React.FC<ConvertFormProps> = ({ rates }) => {
-  const [amount, setAmount] = useState('0');
-  const [amountAsNumber, setAmountAsNumber] = useState(0);
-
+  const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState('USD');
   const [convertedAmount, setConvertedAmount] = useState('0');
 
   useEffect(() => {
-    const amountAsNumber = parseFloat(amount);
-    if (isNaN(amountAsNumber)) {
-      return;
-    }
-    setAmountAsNumber(amountAsNumber);
-
     const selectedRate = rates.find(rate => rate.code === currency);
     if (selectedRate) {
       setConvertedAmount(
-        Number((Number(amountAsNumber) / selectedRate.rate) * selectedRate.amount).toFixed(3),
+        Number((Number(amount) / selectedRate.rate) * selectedRate.amount).toFixed(3),
       );
     }
   }, [amount, currency, rates]);
 
   return (
     <Wrapper>
-      <FormRoot
-        onSubmit={event => {
-          event.preventDefault();
-
-          const amountAsNumber = Number(amount);
-          if (isNaN(amountAsNumber)) {
-            return;
-          }
-
-          const selectedRate = rates.find(rate => rate.code === currency);
-          if (selectedRate) {
-            setConvertedAmount(
-              Number((amountAsNumber / selectedRate.rate) * selectedRate.amount).toFixed(3),
-            );
-          }
-        }}
-      >
+      <FormRoot>
         <FormField name="amount">
           <Flex>
             <FormLabel>Amount in CZK</FormLabel>
           </Flex>
           <Form.Control asChild>
             <Input
-              required
+              placeholder="Enter amount in CZK"
               name="amount"
               id="amount"
               value={amount}
-              onChange={event => setAmount(event.target.value)}
+              onChange={event => {
+                if (/^(\d*\.)?\d*$/.test(event.target.value)) {
+                  setAmount(event.target.value);
+                }
+              }}
               onFocus={event => event.target.select()}
             />
           </Form.Control>
@@ -78,12 +58,8 @@ const ConvertForm: React.FC<ConvertFormProps> = ({ rates }) => {
           />
         </FormField>
 
-        <Form.Submit asChild>
-          <Button>Convert</Button>
-        </Form.Submit>
-
         <ConvertedAmount>
-          {amountAsNumber} CZK
+          {amount || 0} CZK
           <br /> = {convertedAmount} {currency}
         </ConvertedAmount>
       </FormRoot>
@@ -154,32 +130,6 @@ const Input = styled('input')`
   &::selection {
     background-color: ${blackA.blackA9};
     color: white;
-  }
-`;
-
-const Button = styled('button')`
-  all: unset;
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  padding: 0 16px;
-  margin-top: 8px;
-  font-size: 15px;
-  line-height: 1;
-  font-weight: 500;
-  height: 35px;
-  box-shadow: 0 2px 10px ${blackA.blackA7};
-  background-color: ${indigoDark.indigo9};
-  color: white;
-
-  &:hover {
-    background-color: ${indigoDark.indigo8};
-    box-shadow: 0px 2px 10px ${blackA.blackA9};
-  }
-  &:focus {
-    box-shadow: 0 0 0 2px ${blackA.blackA3};
   }
 `;
 
