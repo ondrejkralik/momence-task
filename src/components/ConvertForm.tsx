@@ -92,7 +92,7 @@ const ConvertForm: React.FC<ConvertFormProps> = ({ rates }) => {
 };
 
 const Wrapper = styled.div`
-  width: 350px;
+  max-width: 350px;
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 8px;
@@ -133,9 +133,7 @@ const Flex = styled('div')`
 
 const Input = styled('input')`
   all: unset;
-  height: 35px;
-  line-height: 1;
-  padding: 0 10px;
+  padding: 8px 16px;
   box-sizing: border-box;
   width: 100%;
   display: inline-flex;

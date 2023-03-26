@@ -29,19 +29,34 @@ const Wrapper = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  width: 70%;
+  max-width: 70%;
   margin: 64px auto;
   gap: 16px;
+
+  @media (max-width: 1200px) {
+    max-width: 90%;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    max-width: 100%;
+  }
 `;
 
 const Column = styled.div`
   width: 100%;
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const Note = styled.p`
   font-size: 14px;
   color: #666;
-  width: 350px;
+  max-width: 350px;
   padding: 8px;
 `;
 

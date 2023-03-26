@@ -49,13 +49,11 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({ rates, value, onChange 
 
 const SelectTrigger = styled(Select.SelectTrigger)`
   all: unset;
-  height: 35px;
-  line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: right;
   border-radius: 4px;
-  padding: 0 15px;
+  padding: 8px 16px;
   font-size: 20px;
   gap: 5px;
   box-shadow: 0 0 0 1px ${blackA.blackA7};

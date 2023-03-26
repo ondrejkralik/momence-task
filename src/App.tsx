@@ -36,6 +36,10 @@ const Wrapper = styled.div`
   margin: 0 auto;
   max-width: 1200px;
   padding: 16px;
+
+  @media (max-width: 768px) {
+    padding: 0;
+  }
 `;
 
 export default App;
