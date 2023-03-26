@@ -4,22 +4,66 @@ import styled from 'styled-components';
 
 import type { ExchangeRate } from '@/types';
 import CurrencySelect from './CurrencySelect';
+import { useEffect, useState } from 'react';
 
 interface ConvertFormProps {
   rates: ExchangeRate[];
 }
 
 const ConvertForm: React.FC<ConvertFormProps> = ({ rates }) => {
+  const [amount, setAmount] = useState('0');
+  const [amountAsNumber, setAmountAsNumber] = useState(0);
+
+  const [currency, setCurrency] = useState('USD');
+  const [convertedAmount, setConvertedAmount] = useState('0');
+
+  useEffect(() => {
+    const amountAsNumber = parseFloat(amount);
+    if (isNaN(amountAsNumber)) {
+      return;
+    }
+    setAmountAsNumber(amountAsNumber);
+
+    const selectedRate = rates.find(rate => rate.code === currency);
+    if (selectedRate) {
+      setConvertedAmount(
+        Number((Number(amountAsNumber) / selectedRate.rate) * selectedRate.amount).toFixed(3),
+      );
+    }
+  }, [amount, currency, rates]);
+
   return (
     <Wrapper>
-      <FormRoot>
+      <FormRoot
+        onSubmit={event => {
+          event.preventDefault();
+
+          const amountAsNumber = Number(amount);
+          if (isNaN(amountAsNumber)) {
+            return;
+          }
+
+          const selectedRate = rates.find(rate => rate.code === currency);
+          if (selectedRate) {
+            setConvertedAmount(
+              Number((amountAsNumber / selectedRate.rate) * selectedRate.amount).toFixed(3),
+            );
+          }
+        }}
+      >
         <FormField name="amount">
           <Flex>
             <FormLabel>Amount in CZK</FormLabel>
-            <FormMessage match="typeMismatch">Please provide a valid amount</FormMessage>
           </Flex>
           <Form.Control asChild>
-            <Input required name="amount" id="amount" />
+            <Input
+              required
+              name="amount"
+              id="amount"
+              value={amount}
+              onChange={event => setAmount(event.target.value)}
+              onFocus={event => event.target.select()}
+            />
           </Form.Control>
         </FormField>
 
@@ -27,26 +71,44 @@ const ConvertForm: React.FC<ConvertFormProps> = ({ rates }) => {
           <Flex>
             <FormLabel>Currency</FormLabel>
           </Flex>
-          <Form.Control asChild>
-            <CurrencySelect rates={rates} />
-          </Form.Control>
+          <CurrencySelect
+            rates={rates}
+            value={currency}
+            onChange={newValue => setCurrency(newValue)}
+          />
         </FormField>
 
         <Form.Submit asChild>
           <Button>Convert</Button>
         </Form.Submit>
+
+        <ConvertedAmount>
+          {amountAsNumber} CZK
+          <br /> = {convertedAmount} {currency}
+        </ConvertedAmount>
       </FormRoot>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  width: 200px;
+  width: 350px;
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 8px;
   -webkit-box-shadow: 0px 0px 28px -12px #000000;
   box-shadow: 0px 0px 28px -12px #000000;
+`;
+
+const ConvertedAmount = styled.div`
+  font-size: 35px;
+  font-weight: bold;
+  line-height: 1;
+  color: ${indigoDark.indigo8};
+  margin: 32px 0;
+  padding: 16px;
+  border: 1px solid ${blackA.blackA7};
+  border-radius: 4px;
 `;
 
 const FormRoot = styled(Form.Root)`
@@ -65,11 +127,6 @@ const FormLabel = styled(Form.Label)`
   line-height: 35px;
 `;
 
-const FormMessage = styled(Form.Message)`
-  font-size: 13px;
-  opacity: 0.8;
-`;
-
 const Flex = styled('div')`
   display: flex;
 `;
@@ -85,10 +142,10 @@ const Input = styled('input')`
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  font-size: 15px;
+  font-size: 20px;
   color: black;
   text-align: right;
-  box-shadow: 0 0 0 1px ${blackA.blackA9};
+  box-shadow: 0 0 0 1px ${blackA.blackA7};
 
   &:hover {
     box-shadow: 0 0 0 1px black;
@@ -109,12 +166,12 @@ const Button = styled('button')`
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  padding: 0 15px;
+  padding: 0 16px;
+  margin-top: 8px;
   font-size: 15px;
   line-height: 1;
   font-weight: 500;
   height: 35px;
-  /* width: 100; */
   box-shadow: 0 2px 10px ${blackA.blackA7};
   background-color: ${indigoDark.indigo9};
   color: white;

@@ -1,25 +1,25 @@
 import * as Select from '@radix-ui/react-select';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
-import { violet, mauve, blackA } from '@radix-ui/colors';
+import { blackA } from '@radix-ui/colors';
 
 import type { ExchangeRate } from '@/types';
-import { forwardRef, useState } from 'react';
+import { forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 
 interface CurrencySelectProps {
   rates: ExchangeRate[];
+  value: string;
+  onChange: (newValue: string) => void;
 }
 
-const CurrencySelect: React.FC<CurrencySelectProps> = ({ rates }) => {
-  const [value, setValue] = useState('USD');
-
+const CurrencySelect: React.FC<CurrencySelectProps> = ({ rates, value, onChange }) => {
   return (
-    <Select.Root value={value} onValueChange={newValue => setValue(newValue)}>
+    <Select.Root value={value} onValueChange={onChange}>
       <SelectTrigger aria-label="Amount">
         <Select.Value />
-        <SelectIcon>
+        <Select.SelectIcon>
           <ChevronDownIcon />
-        </SelectIcon>
+        </Select.SelectIcon>
       </SelectTrigger>
       <Select.Portal>
         <SelectContent>
@@ -48,34 +48,27 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({ rates }) => {
 
 const SelectTrigger = styled(Select.SelectTrigger)`
   all: unset;
+  height: 35px;
+  line-height: 1;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: right;
   border-radius: 4px;
   padding: 0 15px;
-  font-size: 13px;
-  line-height: 1;
-  height: 35px;
+  font-size: 20px;
   gap: 5px;
-  background-color: white;
-  color: ${violet.violet11};
-  box-shadow: ${`0 2px 10px ${blackA.blackA7}`};
+  box-shadow: 0 0 0 1px ${blackA.blackA7};
 
   &:hover {
-    background-color: ${mauve.mauve3};
+    box-shadow: 0 0 0 1px black;
   }
-
   &:focus {
-    box-shadow: ${`0 0 0 2px black`};
+    box-shadow: 0 0 0 2px black;
   }
-
-  &[data-placeholder] {
-    color: ${violet.violet9};
+  &::selection {
+    background-color: ${blackA.blackA9};
+    color: white;
   }
-`;
-
-const SelectIcon = styled(Select.SelectIcon)`
-  color: ${violet.violet11};
 `;
 
 const SelectContent = styled(Select.Content)`
@@ -106,7 +99,6 @@ const SelectItem = forwardRef(function SelectItem(
 const StyledItem = styled(Select.Item)`
   font-size: 13px;
   line-height: 1;
-  color: ${violet.violet11};
   border-radius: 3px;
   display: flex;
   align-items: center;
@@ -115,29 +107,9 @@ const StyledItem = styled(Select.Item)`
   position: relative;
   user-select: none;
 
-  &[data-disabled] {
-    color: ${mauve.mauve8};
-    pointer-events: none;
-  }
-
   &[data-highlighted] {
     outline: none;
-    background-color: ${violet.violet9};
-    color: ${violet.violet1};
   }
-`;
-
-const SelectLabel = styled(Select.Label)`
-  padding: 0 25px;
-  font-size: 12px;
-  line-height: 25px;
-  color: ${mauve.mauve11};
-`;
-
-const SelectSeparator = styled(Select.Separator)`
-  height: 1px;
-  background-color: ${violet.violet6};
-  margin: 5px;
 `;
 
 const StyledItemIndicator = styled(Select.ItemIndicator)`
@@ -154,8 +126,6 @@ const scrollButtonStyles = css`
   align-items: center;
   justify-content: center;
   height: 25px;
-  background-color: white;
-  color: ${violet.violet11};
   cursor: default;
 `;
 
