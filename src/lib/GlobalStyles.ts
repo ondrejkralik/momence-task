@@ -1,3 +1,4 @@
+import { gray } from '@radix-ui/colors';
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle`
@@ -10,10 +11,10 @@ const GlobalStyles = createGlobalStyle`
 		-webkit-text-size-adjust: 100%;
 	}
 
-	html,
-	body {
+	html {
 		padding: 0;
 		margin: 0;
+		background-color: ${gray.gray2},
 	}
 `;
 
